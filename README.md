@@ -2,6 +2,30 @@
 
 Modern, kullanıcı dostu bir sağlık izleme mobil uygulaması. Kan şekeri takibi, fiziksel aktivite kaydı ve beslenme değerlendirmesi için tasarlanmış, görüntülere göre özelleştirilmiş şık bir arayüz.
 
+## 📱 QR Kod ile Uygulamayı Açma
+
+### Uygulamayı Çalıştırma
+
+1. Projeyi klonlayın veya indirin
+2. `npm install` ile bağımlılıkları yükleyin
+3. `npm start` ile uygulamayı başlatın
+4. Terminalde görünen **QR kodu** Expo Go ile tarayın
+
+### Expo Go Uygulaması
+
+Uygulamayı telefonunuzda test etmek için önce **Expo Go** uygulamasını indirin:
+
+| Platform | QR Kod | Direkt Link |
+|----------|--------|-------------|
+| **iOS** | ![Expo Go iOS](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://apps.apple.com/app/expo-go/id982107779) | [App Store'dan İndir](https://apps.apple.com/app/expo-go/id982107779) |
+| **Android** | ![Expo Go Android](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://play.google.com/store/apps/details?id=host.exp.exponent) | [Play Store'dan İndir](https://play.google.com/store/apps/details?id=host.exp.exponent) |
+
+### GitHub Repository
+
+Projeyi hızlıca erişmek için QR kodu tarayın:
+
+![GitHub Repo](https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://github.com/abdulkadirelaldi/mobileuyg)
+
 ## 📱 Proje Açıklaması
 
 Bu proje, React Native ve Expo kullanılarak geliştirilmiş, hackathon/challenge kriterlerine tam uyumlu bir sağlık izleme mobil uygulamasıdır. Uygulama, kullanıcıların sağlık verilerini takip etmesine, kaydetmesine ve yönetmesine olanak tanır.
