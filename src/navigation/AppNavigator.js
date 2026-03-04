@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import FormsScreen from '../screens/FormsScreen';
 import BloodSugarScreen from '../screens/BloodSugarScreen';
@@ -21,14 +22,18 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Login"
         screenOptions={{
-          headerShown: false, // Her ekran kendi header'ını oluşturuyor
+          headerShown: false,
           animation: 'slide_from_right',
         }}
       >
-        <Stack.Screen 
-          name="Home" 
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          name="Home"
           component={HomeScreen}
         />
         <Stack.Screen 
