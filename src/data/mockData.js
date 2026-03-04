@@ -121,7 +121,7 @@ const mockHomeCards = [
   {
     id: '2',
     title: 'Eğitimler',
-    icon: '🩸',
+    icon: '📚',
     screen: 'Education',
   },
   {
@@ -133,25 +133,25 @@ const mockHomeCards = [
   {
     id: '4',
     title: 'SSS',
-    icon: '😰',
+    icon: '❓',
     screen: 'FAQ',
   },
   {
     id: '5',
     title: 'Bildirimler',
-    icon: '😲',
+    icon: '🔔',
     screen: 'Notifications',
   },
   {
     id: '6',
     title: 'Anket',
-    icon: '🏋️',
+    icon: '📊',
     screen: 'Survey',
   },
   {
     id: '7',
     title: 'Whatsapp Acil',
-    icon: '📅',
+    icon: '🚨',
     screen: 'WhatsappEmergency',
   },
 ];
