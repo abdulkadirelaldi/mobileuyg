@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Animated,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fetchBloodSugarData } from '../data/mockData';
@@ -43,10 +44,49 @@ const BloodSugarScreen = ({ navigation }) => {
       setError(null);
       const response = await fetchBloodSugarData();
       setData(response.data);
+      const lowSugar = response.data.find((item) => item.bloodSugarValue < 60);
+      if (lowSugar) {
+        showLowSugarWarning();
+      }
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const showLowSugarWarning = () => {
+    Alert.alert(
+      'UYARI',
+      'Lütfen 4-5 kesme şeker veya 150-200 ml meyve suyu alınız. Ardından ek bir ara öğün alınız. 15 dakika sonra kan şekerine bakınız. Normal sınırlara dönene kadar tekrarlayınız ve diyabet eğitimcinizden danışmanlık alınız.',
+      [{ text: 'OK', style: 'default' }]
+    );
+  };
+
+  const handleDelete = (id) => {
+    Alert.alert(
+      'Kaydı Sil',
+      'Bu kan şekeri kaydını silmek istediğinizden emin misiniz?',
+      [
+        { text: 'İptal', style: 'cancel' },
+        {
+          text: 'Sil',
+          style: 'destructive',
+          onPress: () => setData((prev) => prev.filter((item) => item.id !== id)),
+        },
+      ]
+    );
+  };
+
+  const handleInfo = (item) => {
+    if (item.bloodSugarValue < 60) {
+      showLowSugarWarning();
+    } else {
+      Alert.alert(
+        'Kan Şekeri Detayı',
+        `Öğün: ${item.meal}\nAçlık Durumu: ${item.fastingStatus}\nTarih: ${item.date}\nSaat: ${item.time}\nKan Şekeri: ${item.bloodSugarValue} mg/dl${item.insulinDose ? `\nİnsülin Dozu: ${item.insulinDose} ünite` : ''}`,
+        [{ text: 'Tamam' }]
+      );
     }
   };
 
@@ -97,7 +137,10 @@ const BloodSugarScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('AddBloodSugar', {
             onSave: (newRecord) => {
               setData((prev) => [newRecord, ...prev]);
-            }
+              if (newRecord.bloodSugarValue < 60) {
+                showLowSugarWarning();
+              }
+            },
           })}
           variant="primary"
           style={styles.addButton}
@@ -118,8 +161,14 @@ const BloodSugarScreen = ({ navigation }) => {
             },
           ]}
         >
-          {data.map((item, index) => (
-            <View key={item.id} style={styles.dataCard}>
+          {data.map((item) => (
+            <View
+              key={item.id}
+              style={[
+                styles.dataCard,
+                item.bloodSugarValue < 60 && styles.dangerCard,
+              ]}
+            >
               <View style={styles.cardContent}>
                 <View style={styles.cardLeft}>
                   <View style={styles.cardHeader}>
@@ -130,13 +179,30 @@ const BloodSugarScreen = ({ navigation }) => {
                       <Text style={styles.mealType}>{item.meal}</Text>
                       <Text style={styles.mealStatus}>{item.fastingStatus}</Text>
                     </View>
+                    {item.bloodSugarValue < 60 && (
+                      <View style={styles.warningBadge}>
+                        <Text style={styles.warningBadgeText}>⚠️ Düşük</Text>
+                      </View>
+                    )}
                   </View>
-                  
-                  <View style={styles.bloodSugarValue}>
-                    <Text style={styles.bloodSugarText}>{item.bloodSugarValue}</Text>
+
+                  <View
+                    style={[
+                      styles.bloodSugarValue,
+                      item.bloodSugarValue < 60 && styles.bloodSugarValueDanger,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.bloodSugarText,
+                        item.bloodSugarValue < 60 && styles.bloodSugarTextDanger,
+                      ]}
+                    >
+                      {item.bloodSugarValue}
+                    </Text>
                     <Text style={styles.bloodSugarUnit}>mg/dl</Text>
                   </View>
-                  
+
                   <View style={styles.detailsRow}>
                     <View style={styles.detailItem}>
                       <Text style={styles.detailLabel}>Tarih</Text>
@@ -146,14 +212,32 @@ const BloodSugarScreen = ({ navigation }) => {
                       <Text style={styles.detailLabel}>Saat</Text>
                       <Text style={styles.detailValue}>{item.time}</Text>
                     </View>
-                    {item.insulinDose && (
+                    {item.insulinDose ? (
                       <View style={styles.detailItem}>
                         <Text style={styles.detailLabel}>İnsülin</Text>
                         <Text style={styles.detailValue}>{item.insulinDose}</Text>
                       </View>
-                    )}
+                    ) : null}
                   </View>
                 </View>
+              </View>
+
+              {/* Aksiyon Butonları */}
+              <View style={styles.actionButtons}>
+                <TouchableOpacity
+                  style={styles.infoButton}
+                  onPress={() => handleInfo(item)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.infoButtonText}>ℹ️</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDelete(item.id)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.deleteButtonText}>🗑️</Text>
+                </TouchableOpacity>
               </View>
             </View>
           ))}
@@ -298,6 +382,58 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.textPrimary,
     fontWeight: '600',
+  },
+  dangerCard: {
+    borderWidth: 2,
+    borderColor: colors.error,
+  },
+  warningBadge: {
+    backgroundColor: colors.error + '20',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 4,
+    borderRadius: borderRadius.sm,
+  },
+  warningBadgeText: {
+    fontSize: 11,
+    color: colors.error,
+    fontWeight: '700',
+  },
+  bloodSugarValueDanger: {
+    backgroundColor: colors.error + '15',
+  },
+  bloodSugarTextDanger: {
+    color: colors.error,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: spacing.sm,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderLight,
+    marginTop: spacing.sm,
+  },
+  infoButton: {
+    width: 40,
+    height: 40,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.secondary + '15',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  infoButtonText: {
+    fontSize: 20,
+  },
+  deleteButton: {
+    width: 40,
+    height: 40,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.error + '15',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  deleteButtonText: {
+    fontSize: 20,
   },
 });
 
