@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Animated,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -117,7 +118,13 @@ const PhysicalActivityScreen = ({ navigation }) => {
         <View style={styles.addButtonContainer}>
           <ModernButton
             title="Yeni Aktivite Ekle"
-            onPress={() => {}}
+            onPress={() => {
+              Alert.alert(
+                'Bilgi',
+                'Aktivite ekleme özelliği yakında aktif olacak!',
+                [{ text: 'Tamam' }]
+              );
+            }}
             variant="secondary"
             icon="➕"
           />
