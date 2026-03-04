@@ -1,195 +1,280 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
   Animated,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fetchForms } from '../data/mockData';
 import { colors, shadows, borderRadius, spacing } from '../constants/colors';
-import ErrorState from '../components/ErrorState';
-import AnimatedCard from '../components/AnimatedCard';
-import ScreenHeader from '../components/ScreenHeader';
+
+const FORM_CARDS = [
+  {
+    id: '1',
+    title: 'Kan Şekeri\nİzlem',
+    bigIcon: '🩺',
+    screen: 'BloodSugar',
+    gradient: ['#FFFFFF', '#FFF0F1'],
+    accentColor: '#EE3A4C',
+  },
+  {
+    id: '2',
+    title: 'Fiziksel\nAktivite',
+    bigIcon: '🤸‍♀️',
+    screen: 'PhysicalActivity',
+    gradient: ['#FFFFFF', '#F0F4FF'],
+    accentColor: '#4169E1',
+  },
+  {
+    id: '3',
+    title: 'Beslenme\nDeğerlendirme',
+    bigIcon: '🥦',
+    screen: 'Nutrition',
+    gradient: ['#FFFFFF', '#F0FFF4'],
+    accentColor: '#34C759',
+  },
+];
 
 const FormsScreen = ({ navigation }) => {
-  const [forms, setForms] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
-    loadForms();
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        tension: 50,
+        friction: 8,
+        useNativeDriver: true,
+      }),
+    ]).start();
   }, []);
 
-  useEffect(() => {
-    if (!loading && forms.length > 0) {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          tension: 50,
-          friction: 8,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [loading, forms]);
-
-  const loadForms = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetchForms();
-      setForms(response.data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleFormPress = (form) => {
-    if (form.screen === 'BloodSugar') {
-      navigation.navigate('BloodSugar');
-    } else if (form.screen === 'PhysicalActivity') {
-      navigation.navigate('PhysicalActivity');
-    } else if (form.screen === 'Nutrition') {
-      navigation.navigate('Nutrition');
-    }
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ScreenHeader
-          title="Formlar"
-          subtitle="Kayıt formları"
-          onBack={() => navigation.goBack()}
-        />
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={styles.loadingText}>Yükleniyor...</Text>
-        </View>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <ScreenHeader
-          title="Formlar"
-          subtitle="Kayıt formları"
-          onBack={() => navigation.goBack()}
-        />
-        <ErrorState message={error} onRetry={loadForms} />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <ScreenHeader
-        title="Formlar"
-        subtitle="Kayıt formları"
-        onBack={() => navigation.goBack()}
-      />
+    <LinearGradient colors={['#EE3A4C', '#FF6B6B']} style={styles.container}>
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={styles.backButton}>
+              <Text style={styles.backIcon}>←</Text>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.headerTitleContainer}>
+            <Text style={styles.headerTitle}>Formlar</Text>
+            <Text style={styles.headerSubtitle}>Sağlık kayıt formları</Text>
+          </View>
+          <View style={styles.placeholder} />
+        </View>
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <Animated.View
-          style={[
-            styles.animatedContainer,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
-          ]}
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Kayıt Formları</Text>
-            <Text style={styles.sectionSubtitle}>
-              Sağlık verilerinizi kaydetmek için formları kullanın
-            </Text>
-          </View>
+          <Animated.View
+            style={[
+              styles.grid,
+              { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
+            ]}
+          >
+            <View style={styles.row}>
+              {FORM_CARDS.slice(0, 2).map((card) => (
+                <TouchableOpacity
+                  key={card.id}
+                  style={styles.gridCard}
+                  onPress={() => navigation.navigate(card.screen)}
+                  activeOpacity={0.85}
+                >
+                  <LinearGradient colors={card.gradient} style={styles.cardGradient}>
+                    <View
+                      style={[
+                        styles.cardIconWrapper,
+                        { backgroundColor: card.accentColor + '18' },
+                      ]}
+                    >
+                      <Text style={styles.cardBigIcon}>{card.bigIcon}</Text>
+                    </View>
+                    <Text style={[styles.cardTitle, { color: card.accentColor }]}>
+                      {card.title}
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              ))}
+            </View>
 
-          <View style={styles.formsContainer}>
-            {forms.map((form, index) => (
-              <AnimatedCard
-                key={form.id}
-                icon={form.icon}
-                title={form.title}
-                onPress={() => handleFormPress(form)}
-                wide={form.wide}
-                index={index}
-              />
-            ))}
-          </View>
-        </Animated.View>
-      </ScrollView>
-    </View>
+            <TouchableOpacity
+              style={styles.fullCard}
+              onPress={() => navigation.navigate(FORM_CARDS[2].screen)}
+              activeOpacity={0.85}
+            >
+              <LinearGradient
+                colors={FORM_CARDS[2].gradient}
+                style={styles.fullCardGradient}
+              >
+                <View
+                  style={[
+                    styles.fullCardIconWrapper,
+                    { backgroundColor: FORM_CARDS[2].accentColor + '18' },
+                  ]}
+                >
+                  <Text style={styles.fullCardBigIcon}>{FORM_CARDS[2].bigIcon}</Text>
+                </View>
+                <Text
+                  style={[
+                    styles.fullCardTitle,
+                    { color: FORM_CARDS[2].accentColor },
+                  ]}
+                >
+                  {FORM_CARDS[2].title.replace('\n', ' ')}
+                </Text>
+                <Text style={[styles.fullCardArrow, { color: FORM_CARDS[2].accentColor }]}>→</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </Animated.View>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 9999,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  backIcon: {
+    fontSize: 20,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  headerTitleContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: -0.5,
+  },
+  headerSubtitle: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
+    marginTop: 2,
+  },
+  placeholder: {
+    width: 40,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    padding: spacing.screenPadding,
-    paddingBottom: spacing.xxl,
+    padding: 16,
+    paddingBottom: 32,
   },
-  animatedContainer: {
-    flex: 1,
+  grid: {
+    gap: 16,
   },
-  loadingContainer: {
+  row: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  gridCard: {
     flex: 1,
-    justifyContent: 'center',
+    borderRadius: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  cardGradient: {
+    padding: 20,
     alignItems: 'center',
-    gap: spacing.md,
+    minHeight: 160,
+    justifyContent: 'center',
   },
-  loadingText: {
-    color: colors.textSecondary,
-    fontSize: 16,
-    fontWeight: '500',
+  cardIconWrapper: {
+    width: 72,
+    height: 72,
+    borderRadius: 9999,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
   },
-  sectionHeader: {
-    marginBottom: spacing.lg,
+  cardBigIcon: {
+    fontSize: 38,
   },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.textPrimary,
-    letterSpacing: -0.5,
-    marginBottom: spacing.xs,
-  },
-  sectionSubtitle: {
+  cardTitle: {
     fontSize: 14,
-    color: colors.textSecondary,
-    fontWeight: '400',
+    fontWeight: '800',
+    textAlign: 'center',
     lineHeight: 20,
   },
-  formsContainer: {
+  fullCard: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  fullCardGradient: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: spacing.md,
+    alignItems: 'center',
+    padding: 20,
+    gap: 16,
+  },
+  fullCardIconWrapper: {
+    width: 72,
+    height: 72,
+    borderRadius: 9999,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fullCardBigIcon: {
+    fontSize: 38,
+  },
+  fullCardTitle: {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: '800',
+    lineHeight: 24,
+  },
+  fullCardArrow: {
+    fontSize: 22,
+    fontWeight: '800',
   },
 });
 
