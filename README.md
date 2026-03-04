@@ -123,18 +123,27 @@ mobileuyg/
 
 ## 🎨 Tasarım ve Renk Paleti
 
+Tasarım dili, hocanın verdiği Pinterest panosundaki gestasyonel diyabet uygulaması referansından ilham alınarak oluşturulmuştur. Panodaki uygulamanın kırmızı-beyaz renk dili, kart bazlı layout ve gebelik temalı ikonografisi baz alınarak geliştirilmiş ve modern React Native pattern'larıyla zenginleştirilmiştir.
+
+### 🎯 Pano İlhamı — Hangi Kararları Nereden Aldım?
+
+| Karar | Pano İlhamı | Geliştirme |
+|---|---|---|
+| Kırmızı ana renk (`#EE3A4C`) | Pano'daki uygulamanın tüm header ve arka planları kırmızıydı | Gradient versiyonuyla daha modern bir his elde ettim |
+| Mavi aksiyon butonları (`#4169E1`) | Pano'daki "Ekle", "Giriş" butonları mavi |Gradient + ripple animasyonu eklendi |
+| Giriş ekranı — gebe kadın silueti | Pano'nun ilk ekranında gebe kadın logosu + kırmızı arkaplan | 🤰 emoji ile yeniden yorumlandı |
+| Kan şekeri uyarı popup'ı | Pano'da 60 mg/dl altındaki değerler için UYARI kartı görünüyordu | Alert.alert + kart üzerinde ⚠️ badge eklendi |
+| Form kartları 2x2 grid | Pano'da Formlar ekranı 2 sütunlu grid yapısıydı | Illustrated-style emoji ikonlarla zenginleştirildi |
+| Silme butonu (🗑️) her kartta | Pano'daki kan şekeri ve aktivite kartlarında silme butonu vardı | Konfirmasyon alert'i eklendi |
+
 ### Renk Paleti
 
-- **Ana Arka Plan**: `#FF6B6B` (Koral/Pembe) - Ana sayfa ve form ekranları
-- **Kırmızı Header**: `#EE3A4C` - Kan şekeri izlem ekranı header'ı
-- **Mavi Butonlar**: `#4169E1` (Koyu Mavi) ve `#64B5F6` (Açık Mavi)
-- **Turuncu Butonlar**: `#FF9800` - Besin seçim butonu
-- **Yeşil**: `#3CB371` - Fiziksel aktivite kartları için
-- **Beyaz**: `#FFFFFF` - Kartlar ve form alanları
-- **Metin Renkleri**: 
-  - Ana metin: `#1A1A1A` (Koyu Gri)
-  - İkincil metin: `#6B7280` (Gri)
-  - Beyaz metin: `#FFFFFF` (Header ve butonlar)
+- **Ana Renk**: `#EE3A4C` (Kırmızı) — Tüm header'lar, gradient arka planlar
+- **Aksiyon Butonu**: `#4169E1` (Mavi) — Ekle, Kaydet, Giriş butonları
+- **Başarı**: `#34C759` (Yeşil) — Yapıldı durumu, beslenme
+- **Uyarı**: `#FF3B30` (Kırmızı) — Düşük kan şekeri kartları
+- **Beyaz**: `#FFFFFF` — Kartlar ve form alanları
+- **Metin**: `#000000` (Birincil), `#8E8E93` (İkincil)
 
 ### Tasarım Prensipleri
 
@@ -149,6 +158,9 @@ mobileuyg/
 ## 🚦 Navigasyon Akışı
 
 ```
+Login Screen (Giriş)
+    └── GİRİŞ butonu → Home Screen (Ana Sayfa)
+
 Home Screen (Ana Sayfa)
     ├── Formlar kartına tıkla → Forms Screen
     │   ├── Kan Şekeri İzlem → BloodSugar Screen
