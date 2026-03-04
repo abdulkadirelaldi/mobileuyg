@@ -1,55 +1,55 @@
-// Profesyonel Modern Renk Paleti - Minimalist ve Temiz Tasarım
+// Renk Paleti - Pinterest pano ilhamına göre kırmızı tema
 export const colors = {
-  // Ana Renkler - Mavi Accent (Görseldeki gibi)
-  primary: '#007AFF', // iOS Blue - Profesyonel mavi
-  primaryDark: '#0051D5', // Koyu mavi
-  primaryLight: '#5AC8FA', // Açık mavi
-  secondary: '#5856D6', // Mor-mavi
-  accent: '#FF9500', // Turuncu (vurgu için)
-  success: '#34C759', // Yeşil
-  warning: '#FF9500', // Turuncu
-  error: '#FF3B30', // Kırmızı
-  
-  // Gradient Kombinasyonları - Daha Profesyonel
+  // Ana Renkler
+  primary: '#EE3A4C',       // Kırmızı - header ve arka planlar
+  primaryDark: '#C62A39',   // Koyu kırmızı
+  primaryLight: '#FF6B6B',  // Açık kırmızı / mercan
+  secondary: '#4169E1',     // Mavi - aksiyon butonları (Ekle, Kaydet, Giriş)
+  secondaryLight: '#5B85F0',
+  accent: '#FF9500',        // Turuncu
+  success: '#34C759',       // Yeşil
+  warning: '#FF9500',
+  error: '#FF3B30',
+
+  // Gradient Kombinasyonları
   gradients: {
-    primary: ['#007AFF', '#5AC8FA'], // Mavi gradient
-    secondary: ['#5856D6', '#AF52DE'], // Mor gradient
-    accent: ['#FF9500', '#FFB340'], // Turuncu gradient
-    success: ['#34C759', '#5AD27A'], // Yeşil gradient
-    purple: ['#AF52DE', '#D0A3FF'], // Mor gradient
-    blue: ['#007AFF', '#5AC8FA'], // Mavi gradient
+    primary: ['#EE3A4C', '#FF6B6B'],     // Kırmızı gradient
+    secondary: ['#4169E1', '#5B85F0'],   // Mavi gradient
+    accent: ['#FF9500', '#FFB340'],      // Turuncu gradient
+    success: ['#34C759', '#5AD27A'],     // Yeşil gradient
+    purple: ['#AF52DE', '#D0A3FF'],      // Mor gradient
+    blue: ['#4169E1', '#5B85F0'],        // Mavi gradient
   },
-  
-  // Arka Planlar - Minimalist Beyaz Teması
-  background: '#FFFFFF', // Tam beyaz arka plan
-  backgroundLight: '#F5F5F7', // Çok açık gri (iOS gibi)
-  backgroundGray: '#F2F2F7', // Hafif gri
-  cardBackground: '#FFFFFF', // Beyaz kartlar
-  cardBackgroundHover: '#FAFAFA', // Hover durumu
-  inputBackground: '#F2F2F7', // Input arka planı
-  chipBackground: '#F2F2F7', // Chip arka planı
-  chipSelected: '#007AFF', // Seçili chip
-  
-  // Metin Renkleri - Yüksek Kontrast
-  textPrimary: '#000000', // Siyah başlıklar
-  textSecondary: '#8E8E93', // Gri ikincil metin
-  textTertiary: '#C7C7CC', // Açık gri
-  textWhite: '#FFFFFF', // Beyaz metin
-  textLabel: '#8E8E93', // Label rengi
-  textLink: '#007AFF', // Link rengi
-  
-  // Kenarlık Renkleri
-  borderLight: '#E5E5EA', // Açık border
-  borderMedium: '#D1D1D6', // Orta border
-  borderDark: '#C7C7CC', // Koyu border
-  
-  // Gölge ve Efektler - Yumuşak ve Profesyonel
+
+  // Arka Planlar
+  background: '#FFFFFF',
+  backgroundLight: '#F5F5F7',
+  backgroundGray: '#F2F2F7',
+  cardBackground: '#FFFFFF',
+  cardBackgroundHover: '#FAFAFA',
+  inputBackground: '#F2F2F7',
+  chipBackground: '#F2F2F7',
+  chipSelected: '#EE3A4C',
+
+  // Metin Renkleri
+  textPrimary: '#000000',
+  textSecondary: '#8E8E93',
+  textTertiary: '#C7C7CC',
+  textWhite: '#FFFFFF',
+  textLabel: '#8E8E93',
+  textLink: '#4169E1',
+
+  // Kenarlık
+  borderLight: '#E5E5EA',
+  borderMedium: '#D1D1D6',
+  borderDark: '#C7C7CC',
+
+  // Gölge
   shadow: '#000000',
   shadowLight: 'rgba(0, 0, 0, 0.04)',
   shadowMedium: 'rgba(0, 0, 0, 0.08)',
   shadowDark: 'rgba(0, 0, 0, 0.12)',
-  
-  // Overlay
+
   overlay: 'rgba(0, 0, 0, 0.4)',
   overlayLight: 'rgba(0, 0, 0, 0.1)',
 };
